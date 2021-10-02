@@ -1,0 +1,9 @@
+"0","rules <- apriori("
+"0","  as(prescriptions_df$RXDDRUG, ""transactions""), "
+"0","  parameter = list(supp=0.005, conf=0.005, target=""rules"")"
+"0",")"
+"1","Apriori
+"
+"1","
+Parameter specification:
+"

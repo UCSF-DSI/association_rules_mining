@@ -1,0 +1,12 @@
+# Installing Packages
+install.packages("arules")
+install.packages("arulesViz")
+# Loading package
+library(arules)
+library(arulesViz)
+# Installing Packages
+install.packages("arules")
+install.packages("arulesViz")
+# Loading package
+library(arules)
+library(arulesViz)
