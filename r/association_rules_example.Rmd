@@ -5,8 +5,10 @@ output: html_notebook
 
 # Install/Load Required Packages
 
+We'll use the tidyverse. In addition, we'll use [arule](https://www.rdocumentation.org/packages/arules/versions/1.6-8) to implement association rules mining.
+
 ```{r setup, message=FALSE, warning=FALSE}
-packages <- c("arules", "arulesViz", "tidyverse", "haven", "fastDummies")
+packages <- c("tidyverse", "haven", "arules")
 
 # Installing Packages
 # install.packages(packages, update = TRUE, ask = FALSE) 
@@ -18,6 +20,8 @@ for(package in packages) {
 ```
 
 # Data Processing
+
+We'll first load the data from the NHANES website ([data documentation](https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/RXQ_RX_J.htm)) to a tibble. We'll only look at prescriptions taken within the last month, and we'll only need the patient identifier and drug name columns.
 
 ```{r data_processing}
 # Load data from NHANES into prescriptions_df
@@ -33,7 +37,9 @@ prescriptions_df <- prescriptions_df %>%
 prescriptions_df
 ```
 
-```{r one_hot}
+For arules to work, we'll need to group the data by the patient identifier, and we'll the drug names for each patients to be stored within a list in the tibble. As a final step, we removed all patients with no drugs.
+
+```{r group_by_patients}
 prescriptions_df <- prescriptions_df %>% 
   filter(
     RXDDRUG != "55555",
@@ -49,6 +55,8 @@ prescriptions_df
 
 # Mine Frequent Itemsets
 
+Now we can implement association rules mining. First we'll mine the frequent itemsets using the [apriori algorithm](https://en.wikipedia.org/wiki/Apriori_algorithm). We'll generate a list of itemsets with a support of at least 0.005.
+
 ```{r frequent_itemsets}
 frequent_itemsets <- apriori(
   as(prescriptions_df$RXDDRUG, "transactions"), 
@@ -60,6 +68,8 @@ frequent_itemsets <- inspect(frequent_itemsets) %>%
 
 frequent_itemsets
 ```
+
+Next let's look at association rules. From looking at the rules with the highest lift, we see that the insulin drugs are highly associated. What are other patterns that may be interesting?
 
 ```{r association_rules}
 rules <- apriori(
