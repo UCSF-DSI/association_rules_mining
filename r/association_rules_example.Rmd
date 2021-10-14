@@ -8,7 +8,7 @@ output: html_notebook
 We'll use the tidyverse. In addition, we'll use [arule](https://www.rdocumentation.org/packages/arules/versions/1.6-8) to implement association rules mining.
 
 ```{r setup, message=FALSE, warning=FALSE}
-packages <- c("tidyverse", "haven", "arules")
+packages <- c("tidyverse", "haven", "arules", "plotly")
 
 # Installing Packages
 # install.packages(packages, update = TRUE, ask = FALSE) 
@@ -87,4 +87,29 @@ rules <-data.frame(inspect(rules)) %>%
   arrange(desc(lift))
 
 rules
+```
+
+```{r}
+rules %>%
+  filter(
+    support > 0.02 &
+    confidence > 0.6
+  ) %>%
+  select(
+    lhs,
+    rhs
+  )
+  
+```
+
+# Visualize Rules
+
+We can plot the support and confidence (or lift) or each rule on a scatterplot.
+
+```{r}
+ggplot(rules) +
+  aes(x=support, y=confidence, label=lhs, label2=rhs) +
+  geom_point()
+
+ggplotly()
 ```
