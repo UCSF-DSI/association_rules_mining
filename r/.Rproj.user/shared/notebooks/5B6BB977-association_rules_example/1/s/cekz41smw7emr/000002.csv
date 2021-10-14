@@ -1,9 +1,0 @@
-"0","frequent_itemsets <- apriori("
-"0","  as(prescriptions_df$RXDDRUG, ""transactions""), "
-"0","  parameter = list(supp=0.005, target=""frequent itemsets"")"
-"0",")"
-"1","Apriori
-"
-"1","
-Parameter specification:
-"
